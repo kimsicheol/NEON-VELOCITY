@@ -212,6 +212,7 @@
   .diffN2 .cn{color:var(--cyan);text-shadow:0 0 12px var(--cyan)}
   .diffK .cn{color:#ffd24a;text-shadow:0 0 12px #ffb347}
   #saveNote{margin-top:26px;font-size:10px;letter-spacing:2px;color:rgba(160,190,255,.45);text-align:center}
+  #verTag{margin-top:8px;font-size:9px;letter-spacing:3px;color:rgba(255,225,107,.5);text-align:center}
   @media (max-width:780px){
     .card{width:152px;padding:12px 8px}
     #menu h1{font-size:26px;letter-spacing:7px}
@@ -223,7 +224,7 @@
     z-index:60;overflow-y:auto;padding:5vh 16px 40px;
     background:radial-gradient(circle at 50% 30%, rgba(35,8,75,.95), rgba(4,2,14,.98))}
   #profilePanel h2{font-size:22px;font-weight:900;font-style:italic;letter-spacing:8px;margin-bottom:24px;color:#ffe16b;text-shadow:0 0 14px #ffae00}
-  .pRow{display:flex;align-items:center;gap:14px;padding:10px 18px;margin-bottom:8px;min-width:min(680px,92vw);
+  .pRow{display:flex;align-items:center;gap:14px;padding:10px 18px;margin-bottom:8px;min-width:min(780px,94vw);
     background:linear-gradient(90deg,rgba(15,5,40,.7),rgba(15,5,40,.2));border-left:2px solid rgba(0,246,255,.5);font-size:12px;letter-spacing:1px}
   .pRow.cur{border-left-color:#ffe16b;background:linear-gradient(90deg,rgba(80,55,10,.5),rgba(15,5,40,.2))}
   .pRow .pn{font-size:15px;font-weight:900;width:96px;color:#fff}
@@ -279,6 +280,9 @@
   #restart{pointer-events:auto;cursor:pointer;font-size:11px;letter-spacing:3px;color:rgba(180,210,255,.55);
     background:transparent;border:1px solid rgba(0,246,255,.25);padding:8px 24px}
   #restart:hover{color:#fff;border-color:var(--cyan);box-shadow:0 0 14px rgba(0,246,255,.4);background:rgba(0,246,255,.08)}
+  #gpReplay{pointer-events:auto;cursor:pointer;font-size:12px;letter-spacing:3px;color:#ffe16b;
+    background:transparent;border:1px solid rgba(255,225,107,.45);padding:10px 28px;transform:skewX(-8deg)}
+  #gpReplay:hover{background:rgba(255,225,107,.14);box-shadow:0 0 16px rgba(255,200,60,.5)}
 
   #title{left:0;right:0;top:24px;text-align:center}
   #title h1{font-size:22px;font-weight:900;font-style:italic;letter-spacing:12px;
@@ -306,6 +310,13 @@
   #tBoost{right:20px;bottom:140px;border-color:rgba(255,46,196,.65);color:var(--magenta);font-size:14px}
   #tBoost.held{background:rgba(255,46,196,.3);box-shadow:0 0 26px rgba(255,46,196,.85)}
   #tBrake{right:118px;bottom:62px;width:70px;height:70px;font-size:11px}
+  #tShove{right:118px;bottom:150px;width:70px;height:70px;font-size:11px;
+    border-color:rgba(255,225,107,.6);color:#ffe16b}
+  #tShove.held{background:rgba(255,225,107,.28);box-shadow:0 0 24px rgba(255,225,107,.8)}
+  #boostBar.hot{border-color:#ff3020;box-shadow:0 0 16px rgba(255,48,32,.7), inset 0 0 8px rgba(0,0,0,.6)}
+  #boostBar.hot #boostFill{background:linear-gradient(90deg,#ff3020,#ff8a00);animation:pulse .25s infinite alternate}
+  #boostBar.warn{border-color:#ffe16b;box-shadow:0 0 14px rgba(255,225,107,.7), inset 0 0 8px rgba(0,0,0,.6)}
+  #boostBar.warn #boostFill{background:linear-gradient(90deg,#ffe16b,#ff8a00);animation:pulse .16s infinite alternate}
   #tGyro{position:absolute;pointer-events:auto;left:50%;transform:translateX(-50%);bottom:24px;
     width:auto;height:auto;border-radius:20px;padding:9px 22px;font-size:11px;letter-spacing:3px;
     border:1px solid rgba(125,255,176,.5);background:rgba(10,5,35,.55);color:#7dffb0;
@@ -363,6 +374,7 @@
   <div class="tbtn" id="tLeft">◀</div>
   <div class="tbtn" id="tRight">▶</div>
   <div class="tbtn" id="tBoost">BOOST</div>
+  <div class="tbtn" id="tShove">PUSH</div>
   <div class="tbtn" id="tBrake">BRAKE</div>
   <div id="tGyro">기울기 조향 OFF</div>
 </div>
@@ -382,6 +394,9 @@
     <div class="tutRow" id="tutC4"></div>
     <div class="tutRow" id="tutC5"></div>
     <div class="tutRow" id="tutC6"></div>
+    <div class="tutRow" id="tutC7"></div>
+    <div class="tutRow" id="tutC8"></div>
+    <div class="tutRow" id="tutC9"></div>
     <button id="tutStart">출격한다 ▶</button>
   </div>
 </div>
@@ -424,6 +439,7 @@
   </div>
 
   <div id="saveNote"></div>
+  <div id="verTag">NEON VELOCITY v1.0 — PLAYTEST BUILD</div>
 </div>
 
 <div id="setPanel">
@@ -457,6 +473,7 @@
   <div id="resultLaps"></div>
   <div id="resultBtns">
     <button id="rematch">바로 재경기</button>
+    <button id="gpReplay" style="display:none">이 리그 다시 우승하기</button>
     <button id="restart">메뉴로 돌아가기 (R)</button>
   </div>
 </div>
@@ -516,6 +533,9 @@ const T={
   nextTrack:['다음 트랙 ▶ ','NEXT TRACK ▶ '],
   rematch:['바로 재경기','REMATCH'],
   reGp:['다시 그랑프리','RESTART GP'],
+  nextLeague:['다음 리그 ▶ ','NEXT LEAGUE ▶ '],
+  replayLeague:['이 리그 다시 우승하기','REPLAY THIS LEAGUE'],
+  tutC9:['<b>슬립스트림</b> — 앞차 꽁무니에 바짝 붙으면 가속 보너스로 따라잡는다','<b>SLIPSTREAM</b> — tuck in behind a rival for a catch-up speed bonus'],
   toMenu:['메뉴로 돌아가기 (R)','BACK TO MENU (R)'],
   unlockBanner:['🏆 신기체 해금 — ','🏆 NEW SHIP UNLOCKED — '],
   unlockSub:['기체 선택에 추가되었습니다','Added to ship select'],
@@ -533,12 +553,20 @@ const T={
   saveOff:['기록 저장: 이 환경에서는 세션 동안만 유지 (파일을 내려받아 열면 영구 저장)','Saves: session-only here (download & open the file for permanent saves)'],
   gyroOff:['기울기 조향 OFF','TILT STEER OFF'], gyroOn:['기울기 조향 ON','TILT STEER ON'],
   gyroDenied:['기울기 권한 거부됨','TILT PERMISSION DENIED'], gyroNA:['기울기 사용 불가','TILT UNAVAILABLE'],
-  controlsLine:['<b>W</b> 가속 · <b>S</b> 브레이크 · <b>A/D</b> 조향 · <b>SPACE</b> 부스트 · <b>R</b> 메뉴 | <b style="color:#ff8a00">주황 셰브론</b>=부스트 패드 · <b style="color:#ff2ec4">경고 줄무늬</b>=점프대',
-    '<b>W</b> throttle · <b>S</b> brake · <b>A/D</b> steer · <b>SPACE</b> boost · <b>R</b> menu | <b style="color:#ff8a00">orange chevrons</b>=boost pads · <b style="color:#ff2ec4">warning stripes</b>=jump ramps'],
+  controlsLine:['<b>W</b> 가속 · <b>A/D</b> 조향 · <b>SPACE</b> 부스트(과열 주의) · <b>SHIFT/E</b> 밀치기 · <b>R</b> 메뉴 | <b style="color:#ff8a00">주황 셰브론</b>=부스트 패드 · <b style="color:#ff2ec4">경고 줄무늬</b>=점프대',
+    '<b>W</b> throttle · <b>A/D</b> steer · <b>SPACE</b> boost (mind overheat) · <b>SHIFT/E</b> shove · <b>R</b> menu | <b style="color:#ff8a00">orange chevrons</b>=boost pads · <b style="color:#ff2ec4">warning stripes</b>=jump ramps'],
   gpRound:['GP R','GP R'],
   finalLap:['FINAL LAP!','FINAL LAP!'],
   nearMiss:['NEAR MISS +부스트','NEAR MISS +BOOST'],
   perfectLap:['PERFECT LAP! 부스트 완충','PERFECT LAP! FULL BOOST'],
+  overheat:['OVERHEAT! 엔진 과열','OVERHEAT! ENGINE STALL'],
+  shove:['SHOVE!','SHOVE!'],
+  parry:['PARRY! 반격 성공','PARRY! COUNTERED'],
+  aiShove:[' 밀치기 공격!',' SHOVES YOU!'],
+  thShove:['밀치기','SHOVES'],
+  phShove:['밀치기(패리)','SHOVE(PARRY)'],
+  tutC7:['<b>밀치기 (SHIFT / E)</b> — 옆 상대를 밀쳐낸다(부스트 15) · 맞기 직전에 누르면 <b>패리(반격)</b>','<b>SHOVE (SHIFT / E)</b> — knock rivals sideways (15 boost) · press as you get hit to <b>PARRY</b>'],
+  tutC8:['<b>과열 주의</b> — 부스트를 계속 누르면 엔진 과열로 잠시 먹통 · 끊어 써라','<b>OVERHEAT</b> — holding boost too long stalls the engine · feather it'],
   bootPrompt:['탭 또는 아무 키나 눌러 시작','TAP OR PRESS ANY KEY'],
   tutTitle:['조종 훈련 브리핑','PILOT BRIEFING'],
   tutC1:['<b>W</b> 가속 · <b>A/D</b> 조향 · <b>S</b> 브레이크 · <b>SPACE</b> 부스트<br>모바일: 화면 버튼 또는 기울기 조향','<b>W</b> throttle · <b>A/D</b> steer · <b>S</b> brake · <b>SPACE</b> boost<br>Mobile: touch buttons or tilt steering'],
@@ -730,12 +758,12 @@ const SHIPS=[
 // 시뮬레이션 검증 완료: 초보 EASY 승률 ~33% / 중수 NORMAL ~33% /
 // HARD는 기본기체 0%(+1.0s 박빙) · ECLIPSE 40% · SOLARIS 67% — 보상 사다리 성립
 const TIERS=[
-  {skills:[0.96,0.93,0.90], rubberLo:-0.12, rubberHi:0.15, aiAccel:0.95, cornerMul:1.05,
-   burst:{chance:0.28,dur:1.1}, aiStart:{perfect:0.15,good:0.30,jump:0.14}, label:'EASY'},
-  {skills:[1.06,1.03,1.00], rubberLo:-0.05, rubberHi:0.28, aiAccel:1.15, cornerMul:0.62,
-   burst:{chance:0.65,dur:1.6}, aiStart:{perfect:0.32,good:0.40,jump:0.06}, label:'NORMAL'},
-  {skills:[1.03,1.00,0.97], rubberLo:-0.05, rubberHi:0.22, aiAccel:1.12, cornerMul:0.56,
-   burst:{chance:0.65,dur:1.5}, aiStart:{perfect:0.55,good:0.38,jump:0.02}, label:'HARD'}
+  {skills:[0.94,0.91,0.88], rubberLo:-0.24, rubberHi:0.22, aiAccel:0.95, cornerMul:1.05,
+   burst:{chance:0.28,dur:1.1}, aiStart:{perfect:0.15,good:0.30,jump:0.14}, shove:0, label:'EASY'},
+  {skills:[1.06,1.03,1.00], rubberLo:-0.10, rubberHi:0.34, aiAccel:1.15, cornerMul:0.62,
+   burst:{chance:0.65,dur:1.6}, aiStart:{perfect:0.32,good:0.40,jump:0.06}, shove:0.35, label:'NORMAL'},
+  {skills:[1.03,1.00,0.97], rubberLo:-0.08, rubberHi:0.42, aiAccel:1.12, cornerMul:0.56,
+   burst:{chance:0.65,dur:1.5}, aiStart:{perfect:0.55,good:0.38,jump:0.02}, shove:0.8, label:'HARD'}
 ];
 const PMODES={
   kids:{assist:0.45, skillMul:0.86, burstMul:0.35, accelMul:0.88, rubberHiMul:0.7},
@@ -750,7 +778,9 @@ function getDiff(){
     rubberLo:t.rubberLo, rubberHi:t.rubberHi*m.rubberHiMul,
     aiAccel:t.aiAccel*m.accelMul, cornerMul:t.cornerMul*(pmode==='kids'?1.35:1),
     burst:{chance:t.burst.chance*m.burstMul, dur:t.burst.dur},
-    aiStart:t.aiStart, assist:m.assist, label:t.label+(pmode==='kids'?' · KIDS':'')
+    aiStart:t.aiStart, assist:m.assist,
+    shove:pmode==='kids'?0:t.shove,
+    label:t.label+(pmode==='kids'?' · KIDS':'')
   };
 }
 
@@ -758,6 +788,7 @@ function getDiff(){
 const GP_POINTS=[10,6,3,1];
 const GP_ROUNDS=3;
 let gpMode=false, gpTier=0, gpRound=0, gpPoints={};
+let pendingNextTier=null; // 챔피언 후 '다음 리그' 승격 대기
 const RACER_NAMES=['YOU','VIPER','NOVA','ZERO-G'];
 function gpTrackOf(round){ return gpTier*3+round; }
 function startGP(tier){
@@ -773,7 +804,7 @@ let profiles={}, curProfile='PLAYER 1';
 let records={}, unlocks={0:false,1:false,2:false};
 let tutorialSeen=false;
 let volBgm=100, volSfx=100;
-function defaultStats(){ return {races:0,wins:0,podium:0,gpWins:0,hardGpWins:0,laps:0,topSpeed:0,kidsRaces:0,kidsWins:0,kidsGpWins:0}; }
+function defaultStats(){ return {races:0,wins:0,podium:0,gpWins:0,hardGpWins:0,laps:0,topSpeed:0,kidsRaces:0,kidsWins:0,kidsGpWins:0,shoves:0,parries:0}; }
 function defaultProfile(){ return {recs:{}, unlocks:{0:false,1:false,2:false}, stats:defaultStats()}; }
 function recKey(){ return (pmode==='kids'?'k':'')+trackIdx; }
 function pstats(){ return profiles[curProfile].stats; }
@@ -794,7 +825,7 @@ function loadFromObj(d){
       const p=d.profiles[name], recs={};
       for(const k in (p.recs||{})){
         const r=p.recs[k];
-        if(!r.best||r.best<15) continue;
+        if(!r.best||r.best<5) continue;
         recs[k]={best:r.best, ghost:r.ghost?r.ghost.map(s=>({tm:s[0],t:s[1],lat:s[2],h:s[3]})):null};
       }
       profiles[name]={recs, unlocks:Object.assign({0:false,1:false,2:false}, p.unlocks||{}), stats:Object.assign(defaultStats(), p.stats||{})};
@@ -1011,7 +1042,7 @@ function checkPads(r){
     if(crossed(r.prevT,r.t,pad.t)&&Math.abs(r.lat-pad.lat)<2.6){
       r.speed=Math.min(r.base.boostMax*1.08,r.speed+58);
       if(r.isPlayer){
-        r.boost=Math.min(100,r.boost+22);
+        r.boost=Math.min(100,r.boost+14);
         shakeImpulse=Math.min(1.2,shakeImpulse+0.35);
         padFlash=0.25;
         spawnParticles(r.mesh.position,0xff8a00,12,13);
@@ -1135,6 +1166,7 @@ function makeRacer(name,isPlayer,typeIdx,cssColor,startLat,stats){
     t:0,lat:startLat,latVel:0,speed:0,lap:1,prevT:0,
     h:0,vy:0,airborne:false,knockVel:0,drifting:false,crossedStart:false,startPenaltyUntil:0,
     boost:100,boosting:false,finished:false,finishPos:0,
+    boostHold:0,overheat:0,
     base:stats,
     ai:{phase:Math.random()*10,skill:0,target:0,nextBurst:0,burstUntil:0},
     rank:1,steerVis:0
@@ -1171,8 +1203,9 @@ const player=()=>racers.find(r=>r.isPlayer);
 // ================= 고스트 / 랩 기록 =================
 let bestLapTime=Infinity, ghostData=null;
 let curLapSamples=[], lapStartTime=0, lastLapTime=0;
-let lapTimes=[], lapStats=[], curStats={top:0,walls:0,pads:0}, wallContact=false;
+let lapTimes=[], lapStats=[], curStats={top:0,walls:0,pads:0,shoves:0,parries:0}, wallContact=false;
 let startHeldAtGo=false, startEvaluated=true, startPenaltyUntil=0;
+let shoveCd=0, lastShovePress=-9, shoveHeldPrev=false;
 let ghostShip=null;
 function rebuildGhostShip(){
   if(ghostShip) disposeGroup(ghostShip);
@@ -1212,21 +1245,20 @@ function completeLap(p){
   const lt=raceTime-lapStartTime;
   lastLapTime=lt;
   lapTimes.push(lt);
-  lapStats.push({top:Math.round(curStats.top),walls:curStats.walls,pads:curStats.pads});
-  curStats={top:0,walls:0,pads:0};
-  if(lt>=15&&lt<bestLapTime&&curLapSamples.length>10){
+  lapStats.push({top:Math.round(curStats.top),walls:curStats.walls,pads:curStats.pads,shoves:curStats.shoves,parries:curStats.parries});
+  curStats={top:0,walls:0,pads:0,shoves:0,parries:0};
+  if(lt>=5&&lt<bestLapTime&&curLapSamples.length>10){
     bestLapTime=lt;
     ghostData=curLapSamples.slice();
     records[recKey()]={best:bestLapTime,ghost:ghostData};
     saveAll();
     flashLap(tr('newBest')+fmt(lt));
-  } else if(lapStats[lapStats.length-1].walls===0&&lt>=15){
+  } else if(lapStats[lapStats.length-1].walls===0&&lt>=5){
     p.boost=100;
     flashLap(tr('perfectLap'));
   } else {
     flashLap(tr('lap')+fmt(lt));
   }
-  if(lapStats[lapStats.length-1].walls===0&&lt>=15) p.boost=100;
   curLapSamples=[];
   lapStartTime=raceTime;
 }
@@ -1272,7 +1304,7 @@ if(isTouch){
     el.addEventListener('mouseup',off);
     el.addEventListener('mouseleave',off);
   };
-  bind('tLeft','KeyA'); bind('tRight','KeyD'); bind('tBoost','Space'); bind('tBrake','KeyS');
+  bind('tLeft','KeyA'); bind('tRight','KeyD'); bind('tBoost','Space'); bind('tBrake','KeyS'); bind('tShove','KeyE');
   const gyroBtn=document.getElementById('tGyro');
   function handleOrient(e){
     const so=(screen.orientation&&typeof screen.orientation.angle==='number')?screen.orientation.angle:(window.orientation||0);
@@ -1729,7 +1761,7 @@ function applyLang(){
   document.getElementById('saveNote').textContent=storageNote;
   document.getElementById('bootPrompt').textContent=tr('bootPrompt');
   document.getElementById('tutTitle').textContent=tr('tutTitle');
-  for(let i=1;i<=6;i++) document.getElementById('tutC'+i).innerHTML=tr('tutC'+i);
+  for(let i=1;i<=9;i++) document.getElementById('tutC'+i).innerHTML=tr('tutC'+i);
   document.getElementById('tutStart').textContent=tr('tutStart');
   document.getElementById('pauseTitle').textContent=tr('pauseTitle');
   document.getElementById('pResume').textContent=tr('resume');
@@ -1812,16 +1844,26 @@ document.getElementById('impFile').addEventListener('change',e=>{
 });
 
 // ================= 게임패드 지원 =================
-const pad={steer:0,accel:false,brake:false,boost:false};
-let padConnected=false, padStartPrev=false;
-addEventListener('gamepadconnected',()=>{ padConnected=true; if(elSetPanel.style.display==='flex') refreshSetPanel(); });
+const pad={steer:0,accel:false,brake:false,boost:false,shove:false};
+let padConnected=false, padStartPrev=false, padDisabled=false;
+addEventListener('gamepadconnected',()=>{ padConnected=true; padDisabled=false; if(elSetPanel.style.display==='flex') refreshSetPanel(); });
 addEventListener('gamepaddisconnected',()=>{ padConnected=false; if(elSetPanel.style.display==='flex') refreshSetPanel(); });
 function pollGamepad(){
-  const gps=navigator.getGamepads?navigator.getGamepads():[];
+  if(padDisabled) return;
+  let gps=[];
+  try{
+    gps=navigator.getGamepads?navigator.getGamepads():[];
+  }catch(e){
+    // 샌드박스(iframe) 환경: 게임패드 API 차단 → 폴링 영구 비활성화
+    padDisabled=true;
+    padConnected=false;
+    pad.steer=0; pad.accel=pad.brake=pad.boost=pad.shove=false;
+    return;
+  }
   let g=null;
   for(const x of gps){ if(x&&x.connected){ g=x; break; } }
   padConnected=!!g;
-  if(!g){ pad.steer=0; pad.accel=pad.brake=pad.boost=false; padStartPrev=false; return; }
+  if(!g){ pad.steer=0; pad.accel=pad.brake=pad.boost=pad.shove=false; padStartPrev=false; return; }
   const bt=i=>{ const b=g.buttons[i]; return !!b&&(b.pressed||b.value>0.35); };
   const ax=g.axes[0]||0;
   pad.steer=Math.abs(ax)>0.15?ax:0;
@@ -1830,6 +1872,7 @@ function pollGamepad(){
   pad.accel=bt(7)||bt(12);               // RT 또는 십자 위
   pad.brake=bt(6)||bt(13);               // LT 또는 십자 아래
   pad.boost=bt(0)||bt(5);                // A 또는 RB
+  pad.shove=bt(1)||bt(2);                // B 또는 X = 밀치기
   const st=bt(9);                        // START
   if(st&&!padStartPrev){
     if(!booted) dismissBoot();
@@ -1890,8 +1933,10 @@ function startRace(){
   paused=false; document.getElementById('pause').style.display='none';
   countTimer=0; countStep=4; raceTime=0; finishedCount=0; shakeImpulse=0;
   lapStartTime=0; lastLapTime=0; curLapSamples=[]; lapTimes=[];
-  lapStats=[]; curStats={top:0,walls:0,pads:0}; wallContact=false;
+  lapStats=[]; curStats={top:0,walls:0,pads:0,shoves:0,parries:0}; wallContact=false;
   startHeldAtGo=false; startEvaluated=true; startPenaltyUntil=0;
+  shoveCd=0; lastShovePress=-9; shoveHeldPrev=false;
+  document.getElementById('gpReplay').style.display='none';
   elMenu.style.display='none';
   document.body.classList.remove('menuOn');
   document.body.classList.add('inRace');
@@ -1929,6 +1974,16 @@ function showCount(txt,sub){
 
 // ================= 물리 =================
 function progressOf(r){ return (r.lap-1)+r.t; }
+// 슬립스트림: 12유닛 이내 바로 앞에 다른 기체가 있으면 1 (드래프팅 보너스)
+function draftOf(me){
+  if(state!=='race'||me.finished) return 0;
+  for(const o of racers){
+    if(o===me||o.finished) continue;
+    let ds=o.t-me.t; if(ds>0.5)ds-=1; if(ds<-0.5)ds+=1; ds*=TRACK_LEN;
+    if(ds>2&&ds<13&&Math.abs(o.lat-me.lat)<2.4&&Math.abs(o.h-me.h)<2) return 1;
+  }
+  return 0;
+}
 function updatePlayer(p,dt){
   const canDrive=state==='race'&&!p.finished;
   const accelIn=canDrive&&(keys['KeyW']||keys['ArrowUp']||isTouch||pad.accel);
@@ -1940,12 +1995,62 @@ function updatePlayer(p,dt){
     steer=THREE.MathUtils.clamp(steer+pad.steer,-1,1);
     if(gyroEnabled) steer=THREE.MathUtils.clamp(steer+gyroSteer,-1,1);
   }
-  p.boosting=canDrive&&(keys['Space']||pad.boost)&&p.boost>1;
+  p.boosting=canDrive&&(keys['Space']||pad.boost)&&p.boost>1&&p.overheat<=0;
+  // 과열: 부스트를 계속 누르면 엔진이 뻗는다 (오락실식 끊어 쓰기)
+  const heatLimit=(curDiff&&curDiff.assist<1)?3.0:1.7; // 키즈는 관대하게
+  if(p.boosting){
+    p.boostHold+=dt;
+    if(p.boostHold>heatLimit){
+      p.overheat=1.8; p.boostHold=0; p.boosting=false;
+      p.speed*=0.85;
+      flashLap(tr('overheat'));
+      beep(160,0.35,0.26);
+      spawnParticles(p.mesh.position,0xff3020,16,12);
+      shakeImpulse=Math.min(1.4,shakeImpulse+0.6);
+    }
+  } else {
+    p.boostHold=Math.max(0,p.boostHold-dt*1.7);
+  }
+  if(p.overheat>0) p.overheat-=dt;
+  // 과열 경고: 한계 0.7초 전부터 노란 점멸 + 틱음
+  const warnNow=p.boosting&&p.boostHold>heatLimit-0.7;
+  if(warnNow&&!p.heatWarn) beep(720,0.05,0.11);
+  p.heatWarn=warnNow;
+  // 밀치기 (SHIFT / E / 패드 B·X): 옆에 붙은 상대를 밀쳐낸다 · 누른 순간 기록(패리 판정용)
+  const shoveIn=canDrive&&(keys['ShiftLeft']||keys['ShiftRight']||keys['KeyE']||pad.shove);
+  if(shoveIn&&!shoveHeldPrev) lastShovePress=raceTime;
+  shoveHeldPrev=shoveIn;
+  if(shoveIn&&raceTime>shoveCd){
+    let target=null, tDl=99;
+    for(const r of racers){
+      if(r.isPlayer||r.finished) continue;
+      let ds=p.t-r.t; if(ds>0.5)ds-=1; if(ds<-0.5)ds+=1; ds*=TRACK_LEN;
+      const dl=r.lat-p.lat;
+      if(Math.abs(ds)<6&&Math.abs(dl)<5.5&&Math.abs(p.h-r.h)<2.5&&Math.abs(dl)<tDl){ target=r; tDl=Math.abs(dl); }
+    }
+    if(target){
+      shoveCd=raceTime+1.1;
+      p.boost=Math.max(0,p.boost-15);
+      const dir=Math.sign(target.lat-p.lat)||1;
+      target.knockVel+=dir*17;
+      target.speed*=0.95;
+      p.latVel-=dir*3;
+      spawnParticles(target.mesh.position,0xffffff,16,17);
+      shakeImpulse=Math.min(1.5,shakeImpulse+0.5);
+      if(state==='race') curStats.shoves++;
+      flashLap(tr('shove'));
+      beep(300,0.12,0.22);
+    } else {
+      shoveCd=raceTime+0.45; // 허공 밀치기 페널티
+    }
+  }
   if(p.boosting) p.boost=Math.max(0,p.boost-p.base.drain*dt);
-  else p.boost=Math.min(100,p.boost+p.base.regen*dt);
+  else if(p.overheat<=0) p.boost=Math.min(100,p.boost+p.base.regen*dt);
 
-  const maxS=p.boosting?p.base.boostMax:p.base.maxSpeed;
-  let accel=p.base.accel*(p.boosting?1.9:1);
+  const draft=draftOf(p); // 슬립스트림: 앞차 뒤에 붙으면 보너스
+  let maxS=(p.boosting?p.base.boostMax:p.base.maxSpeed)*(1+0.06*draft);
+  if(p.overheat>0) maxS*=0.92; // 과열 림프 모드
+  let accel=p.base.accel*(p.boosting?1.65:1)*(1+0.15*draft);
   if(canDrive&&!startEvaluated){
     const trig=pad.accel||(isTouch?keys['Space']:(keys['KeyW']||keys['ArrowUp']));
     if(startHeldAtGo){
@@ -1975,7 +2080,7 @@ function updatePlayer(p,dt){
     p.latVel-=turn*p.speed*0.42*assist*dt;
     if(!p.airborne&&Math.abs(turn)>0.05&&steer*Math.sign(turn)>0.25&&p.speed>p.base.maxSpeed*0.55){
       p.drifting=true;
-      p.boost=Math.min(100,p.boost+17*dt);
+      p.boost=Math.min(100,p.boost+14*dt);
       p.latVel-=p.latVel*Math.min(1,dt*2.2);
     }
   }
@@ -2010,17 +2115,74 @@ function updateAI(r,dt){
   const d=curDiff;
   const p=player();
   const gap=progressOf(p)-progressOf(r);
-  const rubber=THREE.MathUtils.clamp(gap*1.8,d.rubberLo,d.rubberHi);
+  const rubber=THREE.MathUtils.clamp(gap*3.0,d.rubberLo,d.rubberHi);
   const fNow=frameAt(r.t),fAhead=frameAt(r.t+60/TRACK_LEN);
   const curv=1-fNow.tan.dot(fAhead.tan);
   if(raceTime>r.ai.nextBurst){
     r.ai.nextBurst=raceTime+1.6+Math.random()*2.2;
     if(curv<0.04&&Math.random()<d.burst.chance) r.ai.burstUntil=raceTime+d.burst.dur;
   }
-  const bursting=raceTime<r.ai.burstUntil;
+  // 팩 레이싱: 뒤처지면 직선에서 즉시 추격 부스트 (오락실식 끝까지 붙기)
+  const behindS=gap*TRACK_LEN/30;
+  if(behindS>0.8&&curv<0.05) r.ai.burstUntil=Math.max(r.ai.burstUntil,raceTime+0.5);
+  // 맞밀치기: 노멀/하드 AI는 옆에 붙은 플레이어를 밀쳐낸다
+  if(d.shove>0&&!p.finished){
+    let dsP=r.t-p.t; if(dsP>0.5)dsP-=1; if(dsP<-0.5)dsP+=1; dsP*=TRACK_LEN;
+    const dlP=p.lat-r.lat;
+    r.ai.shoveCd=r.ai.shoveCd||0;
+    if(Math.abs(dsP)<5.5&&Math.abs(dlP)<4.8&&Math.abs(p.h-r.h)<2.5
+       &&raceTime>r.ai.shoveCd&&Math.random()<d.shove*dt){
+      const dir=Math.sign(dlP)||1;
+      if(raceTime-lastShovePress<0.28){
+        // 패리 성공: 공격한 AI가 오히려 튕겨나간다
+        r.ai.shoveCd=raceTime+3.2;
+        r.knockVel-=dir*16;
+        r.speed*=0.93;
+        p.boost=Math.min(100,p.boost+8);
+        spawnParticles(p.mesh.position,0x00f6ff,18,17);
+        shakeImpulse=Math.min(1.4,shakeImpulse+0.45);
+        if(state==='race') curStats.parries++;
+        flashLap(tr('parry'));
+        beep(880,0.16,0.24);
+      } else {
+        r.ai.shoveCd=raceTime+2.4;
+        p.latVel+=dir*13;
+        p.speed*=0.965;
+        spawnParticles(p.mesh.position,0xff5a2e,14,15);
+        shakeImpulse=Math.min(1.6,shakeImpulse+0.7);
+        flashLap(r.name+tr('aiShove'));
+        beep(240,0.14,0.22);
+      }
+    }
+    // AI끼리 몸싸움: 나란히 달리는 다른 AI를 밀친다 (선두 그룹이 흐트러지는 변수)
+    for(const o of racers){
+      if(o===r||o.isPlayer||o.finished) continue;
+      let dsO=r.t-o.t; if(dsO>0.5)dsO-=1; if(dsO<-0.5)dsO+=1; dsO*=TRACK_LEN;
+      const dlO=o.lat-r.lat;
+      if(Math.abs(dsO)<5.5&&Math.abs(dlO)<4.5&&Math.abs(o.h-r.h)<2.5
+         &&raceTime>r.ai.shoveCd&&Math.random()<d.shove*0.55*dt){
+        r.ai.shoveCd=raceTime+2.8;
+        const dirO=Math.sign(dlO)||1;
+        o.knockVel+=dirO*15;
+        o.speed*=0.955;
+        spawnParticles(o.mesh.position,0xffb347,10,13);
+        break;
+      }
+    }
+  }
+  // AI 부스트 게이지: 플레이어와 같은 자원 경제 (버스트=게이지 소모, 뒤처지면 급속 충전)
+  let bursting=raceTime<r.ai.burstUntil&&r.boost>2;
+  if(bursting) r.boost=Math.max(0,r.boost-40*dt);
+  else r.boost=Math.min(100,r.boost+(13+(behindS>0.5?15:0))*dt);
+  if(r.boost<=2) r.ai.burstUntil=0;
+  // 파이널 랩 총력전: 게이지만 있으면 직선마다 지른다
+  const finalLap=r.lap>=TOTAL_LAPS;
+  if(finalLap&&curv<0.05&&r.boost>12) r.ai.burstUntil=Math.max(r.ai.burstUntil,raceTime+0.4);
+  const skillNow=r.ai.skill+(finalLap?0.05:0);
   r.boosting=bursting;
-  const maxS=(bursting?r.base.boostMax*0.94:r.base.maxSpeed)*(r.ai.skill+rubber);
-  let aiAcc=r.base.accel*d.aiAccel*(bursting?1.6:1);
+  const aiDraft=draftOf(r); // AI도 슬립스트림
+  const maxS=(bursting?r.base.boostMax*0.94:r.base.maxSpeed)*(skillNow+rubber)*(1+0.06*aiDraft);
+  let aiAcc=r.base.accel*d.aiAccel*(bursting?1.6:1)*(1+0.15*aiDraft);
   if(raceTime<r.startPenaltyUntil) aiAcc*=0.3;
   r.speed+=aiAcc*dt;
   r.speed-=r.speed*0.25*dt;
@@ -2045,6 +2207,10 @@ function updateAI(r,dt){
 function advance(r,dt){
   if(r.knockVel){
     r.lat+=r.knockVel*dt;
+    if(Math.abs(r.lat)>MAX_LAT&&Math.abs(r.knockVel)>6){
+      r.speed*=0.88; // 벽으로 밀려 박힘
+      spawnParticles(r.mesh.position,0xffd24a,10,13);
+    }
     r.knockVel-=r.knockVel*Math.min(1,dt*4);
     if(Math.abs(r.knockVel)<0.2) r.knockVel=0;
     r.lat=THREE.MathUtils.clamp(r.lat,-MAX_LAT,MAX_LAT);
@@ -2054,7 +2220,7 @@ function advance(r,dt){
   if(r.prevT>0.85&&r.t<0.15&&state==='race'){
     if(!r.crossedStart){
       r.crossedStart=true;
-      if(r.isPlayer){ lapStartTime=raceTime; curLapSamples=[]; curStats={top:0,walls:0,pads:0}; }
+      if(r.isPlayer){ lapStartTime=raceTime; curLapSamples=[]; curStats={top:0,walls:0,pads:0,shoves:0,parries:0}; }
     } else {
       if(r.isPlayer&&!r.finished) completeLap(r);
       r.lap++;
@@ -2195,7 +2361,11 @@ function endRace(pos){
     if(pos<=3) st.podium++;
   }
   st.laps+=lapTimes.length;
-  lapStats.forEach(s=>{ st.topSpeed=Math.max(st.topSpeed,s.top||0); });
+  lapStats.forEach(s=>{
+    st.topSpeed=Math.max(st.topSpeed,s.top||0);
+    st.shoves=(st.shoves||0)+(s.shoves||0);
+    st.parries=(st.parries||0)+(s.parries||0);
+  });
 
   let gpHtml='';
   if(gpMode){
@@ -2235,7 +2405,17 @@ function endRace(pos){
       elResultPos.textContent=champ.isPlayer?tr('champion'):suf[table.findIndex(r=>r.isPlayer)+1];
       elResultPos.style.color=champ.isPlayer?'#ffe16b':'#fff';
       document.getElementById('resultTxt').textContent=tr('gpFinal')+' — '+TIERS[gpTier].label+' ['+curDiff.label+']';
-      document.getElementById('rematch').textContent=tr('reGp');
+      const gpReplayBtn=document.getElementById('gpReplay');
+      if(champ.isPlayer&&gpTier<2){
+        pendingNextTier=gpTier+1;
+        document.getElementById('rematch').textContent=tr('nextLeague')+TIERS[pendingNextTier].label+' GP';
+        gpReplayBtn.textContent=tr('replayLeague');
+        gpReplayBtn.style.display='block';
+      } else {
+        pendingNextTier=null;
+        gpReplayBtn.style.display='none';
+        document.getElementById('rematch').textContent=tr('reGp');
+      }
     } else {
       elResultPos.textContent=suf[pos];
       elResultPos.style.color=pos===1?'#ffe16b':'#fff';
@@ -2253,23 +2433,24 @@ function endRace(pos){
   let html='';
   if(lapTimes.length){
     const fastest=Math.min.apply(null,lapTimes);
-    html+='<div class="lr head"><span class="ln"></span><span class="lv">'+tr('thTime')+'</span><span class="ls">'+tr('thTop')+'</span><span class="ls">'+tr('thWall')+'</span><span class="ls">'+tr('thPad')+'</span></div>';
-    let total=0,tWalls=0,tPads=0,tTop=0;
+    html+='<div class="lr head"><span class="ln"></span><span class="lv">'+tr('thTime')+'</span><span class="ls">'+tr('thTop')+'</span><span class="ls">'+tr('thWall')+'</span><span class="ls">'+tr('thPad')+'</span><span class="ls">'+tr('thShove')+'</span></div>';
+    let total=0,tWalls=0,tPads=0,tTop=0,tShoves=0;
     lapTimes.forEach((lt,i)=>{
       total+=lt;
-      const s2=lapStats[i]||{top:0,walls:0,pads:0};
-      tWalls+=s2.walls; tPads+=s2.pads; tTop=Math.max(tTop,s2.top);
+      const s2=lapStats[i]||{top:0,walls:0,pads:0,shoves:0};
+      tWalls+=s2.walls; tPads+=s2.pads; tTop=Math.max(tTop,s2.top); tShoves+=(s2.shoves||0)+(s2.parries||0);
       html+='<div class="lr'+(lt===fastest?' bl':'')+'">'
         +'<span class="ln">LAP '+(i+1)+'</span>'
         +'<span class="lv">'+fmt(lt)+'</span>'
         +'<span class="ls">'+s2.top+'</span>'
         +'<span class="ls">'+s2.walls+'</span>'
-        +'<span class="ls">'+s2.pads+'</span></div>';
+        +'<span class="ls">'+s2.pads+'</span>'
+        +'<span class="ls">'+((s2.shoves||0)+(s2.parries||0))+'</span></div>';
     });
     html+='<div class="lr total"><span class="ln">'+tr('total')+'</span><span class="lv">'+fmt(total)+'</span>'
-      +'<span class="ls">'+tTop+'</span><span class="ls">'+tWalls+'</span><span class="ls">'+tPads+'</span></div>';
+      +'<span class="ls">'+tTop+'</span><span class="ls">'+tWalls+'</span><span class="ls">'+tPads+'</span><span class="ls">'+tShoves+'</span></div>';
   }
-  html+='<div class="lr"><span class="ln">'+tr('best')+'</span><span class="lv best">'+fmt(bestLapTime)+'</span><span class="ls"></span><span class="ls"></span><span class="ls"></span></div>';
+  html+='<div class="lr"><span class="ln">'+tr('best')+'</span><span class="lv best">'+fmt(bestLapTime)+'</span><span class="ls"></span><span class="ls"></span><span class="ls"></span><span class="ls"></span></div>';
   html+=gpHtml;
   if(!gpMode&&ghostData) html+='<div style="margin-top:8px;font-size:11px;letter-spacing:2px;color:rgba(140,240,255,.7)">'+tr('ghostNote')+'</div>';
   document.getElementById('resultLaps').innerHTML=html;
@@ -2281,9 +2462,14 @@ function endRace(pos){
 document.getElementById('restart').addEventListener('click',toMenu);
 document.getElementById('rematch').addEventListener('click',()=>{
   if(gpMode){
-    if(gpRound<GP_ROUNDS-1){ gpRound++; trackIdx=gpTrackOf(gpRound); startRace(); }
+    if(pendingNextTier!=null){ const t=pendingNextTier; pendingNextTier=null; startGP(t); }
+    else if(gpRound<GP_ROUNDS-1){ gpRound++; trackIdx=gpTrackOf(gpRound); startRace(); }
     else startGP(gpTier);
   } else startRace();
+});
+document.getElementById('gpReplay').addEventListener('click',()=>{
+  pendingNextTier=null;
+  startGP(gpTier);
 });
 
 // ================= 카메라 =================
@@ -2422,6 +2608,8 @@ function updateHUD(){
   updateLapProg(sorted);
   elBoostFill.style.width=p.boost+'%';
   elBoostBar.classList.toggle('full',p.boost>99);
+  elBoostBar.classList.toggle('hot',p.overheat>0);
+  elBoostBar.classList.toggle('warn',!!p.heatWarn&&p.overheat<=0);
   document.getElementById('driftTag').classList.toggle('on',!!p.drifting);
   if(p.rank<prevRank){ elPos.classList.remove('bump'); void elPos.offsetWidth; elPos.classList.add('bump'); }
   prevRank=p.rank;
@@ -2553,11 +2741,14 @@ function refreshProfileUI(rebuildPanel){
 function buildProfilePanel(){
   saveAll();
   const names=Object.keys(profiles);
+  const maxShoves=Math.max.apply(null,names.map(n=>profiles[n].stats.shoves||0));
+  const maxParries=Math.max.apply(null,names.map(n=>profiles[n].stats.parries||0));
   let html='<div class="pRow" style="border-left-color:transparent;background:none">'
     +'<span class="pn"></span>'
     +'<span class="pstat">'+tr('phRaces')+'</span><span class="pstat">'+tr('phWins')+'</span>'
     +'<span class="pstat">'+tr('phGp')+'</span><span class="pstat">'+tr('phHard')+'</span>'
     +'<span class="pstat">'+tr('phKids')+'</span>'
+    +'<span class="pstat">'+tr('phShove')+'</span>'
     +'<span class="pstat">'+tr('phTop')+'</span><span class="pstat">'+tr('phShip')+'</span></div>';
   names.forEach(name=>{
     const p=profiles[name],s=p.stats;
@@ -2565,6 +2756,10 @@ function buildProfilePanel(){
     const shipsN=(p.unlocks[0]?1:0)+(p.unlocks[1]?1:0)+(p.unlocks[2]?1:0);
     const kidsW=s.kidsWins||0, kidsR=s.kidsRaces||0, kidsGp=s.kidsGpWins||0;
     const kidsCell='🧒 '+kidsW+'/'+kidsR+(kidsGp?' ·'+kidsGp+'GP':'');
+    const sh=s.shoves||0, pr=s.parries||0;
+    const shoveCell=sh+'('+pr+')'
+      +(sh>0&&sh===maxShoves?' 🥊':'')
+      +(pr>0&&pr===maxParries?' 🛡️':'');
     html+='<div class="pRow'+(name===curProfile?' cur':'')+'">'
       +'<span class="pn">'+name+'</span>'
       +'<span class="pstat">'+s.races+'</span>'
@@ -2572,6 +2767,7 @@ function buildProfilePanel(){
       +'<span class="pstat">'+s.gpWins+'</span>'
       +'<span class="pstat">'+s.hardGpWins+'</span>'
       +'<span class="pstat" style="color:#ffd24a">'+kidsCell+'</span>'
+      +'<span class="pstat" style="color:#ff8a4a">'+shoveCell+'</span>'
       +'<span class="pstat">'+(s.topSpeed||0)+'</span>'
       +'<span class="pstat">'+shipsN+'/3 🏆</span>'
       +'<button class="pSel" data-prof="'+name+'"'+(name===curProfile?' disabled':'')+'>'
